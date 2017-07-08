@@ -3,6 +3,7 @@
 Python Aplication Template
 Licence: GPLv3
 """
+import os
 
 class Config(object):
 	"""
@@ -10,10 +11,12 @@ class Config(object):
 	"""
 	DEBUG = False
 	TESTING = False
-	DATABASE_URI = 'sqlite:///application.db'
+	DATABASE_URI = 'sqlite:///{}'.format(os.path.join(os.path.expanduser('~'), 'weather.db'))
+	SQLALCHEMY_DATABASE_URI = DATABASE_URI
 	BOOTSTRAP_FONTAWESOME = True
 	SECRET_KEY = "MINHACHAVESECRETA"
 	CSRF_ENABLED = True
+	SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 	#Get your reCaptche key on: https://www.google.com/recaptcha/admin/create
 	#RECAPTCHA_PUBLIC_KEY = "6LffFNwSAAAAAFcWVy__EnOCsNZcG2fVHFjTBvRP"

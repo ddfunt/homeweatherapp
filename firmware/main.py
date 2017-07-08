@@ -9,22 +9,36 @@ import urequests
 import time
 import json
 py = Pysense()
-mp = MPL3115A2(py,mode=MPL3115A2.ALTITUDE) # Returns height in meters. Mode may also be set to PRESSURE, returning a value in Pascals
+mp = MPL3115A2(py) # Returns height in meters. Mode may also be set to PRESSURE, returning a value in Pascals
 si = SI7006A20(py)
 lt = LTR329ALS01(py)
 li = LIS2HH12(py)
 
 
 KEY = 'abcd'
-def connect_socket():
-    payload = json.dumps({'signature':'abcd', 'x':1})
+def send_to_server(data):
+    data['signature'] = KEY
+    payload = json.dumps(data)
     myheaders = {
     "Authorization": "Bearer 38dfbef7900f75cadbae76e33f91363f",
     "Content-Type": "application/json"
     }
-    url = 'http://192.168.1.136:5000/events'#'http://www.myinterestcalc.com/events'
-    x = urequests.urlopen(url, "POST", data=payload, headers=myheaders)
-    print('RESPONSE', x.text)
+    url = 'http://www.myinterestcalc.com/events'#'http://www.myinterestcalc.com/events'
+    try:
+        x = urequests.urlopen(url, "POST", data=payload, headers=myheaders)
+        print('RESPONSE', x.text)
+    except Exception:
+        print('FAILED SEND')
+
+
+def get_data():
+    resp = {'temp1': mp.temperature(),
+            'temp2': si.temperature(),
+            'humidity': si.humidity(),
+            'light': lt.light(),
+            'battery': py.read_battery_voltage(),
+            'pressure': mp.pressure()}
+    return resp
 #simple change
 print(mp.temperature())
 print(mp.temperature())
@@ -46,5 +60,7 @@ while True:
 """
 
 print(py.read_battery_voltage())
-
-connect_socket()
+while True:
+    data = get_data()
+    send_to_server(data)
+    time.sleep(1)
