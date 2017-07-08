@@ -6,9 +6,9 @@ Licence: GPLv3
 
 from flask import url_for, redirect, render_template, flash, g, session, request
 from flask_login import login_user, logout_user, current_user, login_required
-from app import app, lm
+from app import app, lm, db
 from .forms import ExampleForm, LoginForm
-from .models import Record, Day
+from .models import Record#, Day
 
 import json
 
@@ -20,11 +20,11 @@ LASTDATA = 'NOTHING YET'
 def validate_user(data):
 	if 'signature' in data.keys():
 		if VALIDATION_KEY == data['signature']:
-			return data
+			return data, True
 		else:
-			return "Unauthorized upload"
+			return "Unauthorized upload", False
 	else:
-		return "Invalid input data"
+		return "Invalid input data", False
 
 @app.route('/')
 def index():
@@ -35,6 +35,16 @@ def events():
 	event_data = request.json
 	if not isinstance(event_data, dict):
 		event_data = json.loads(request.json)
-	checked_data = validate_user(event_data)
+	checked_data, valid = validate_user(event_data)
 	globals()['LASTDATA'] = str(checked_data)
+	if valid:
+		json_to_db(checked_data)
 	return str(checked_data)
+
+
+def json_to_db(data):
+	record = Record(**data)
+	print(record)
+	db.session.add(record)
+
+	db.session.commit()

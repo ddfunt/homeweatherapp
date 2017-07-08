@@ -3,12 +3,13 @@
 Python Aplication Template
 Licence: GPLv3
 """
-
+import os
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 #from flask_pymongo import PyMongo
 from flask_login import LoginManager
+
 
 app = Flask(__name__)
 
@@ -24,4 +25,10 @@ lm = LoginManager()
 lm.init_app(app)
 lm.login_view = 'login'
 
-from app import views, models
+
+
+from app import views, models, confguration
+
+if not os.path.isfile(confguration.SQLALCHEMY_DATABASE_URI):
+    db.create_all()
+    db.session.commit()
