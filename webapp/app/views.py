@@ -14,6 +14,9 @@ import json
 
 VALIDATION_KEY = 'abcd'
 
+LASTDATA = 'NOTHING YET'
+
+
 def validate_user(data):
 	if 'signature' in data.keys():
 		if VALIDATION_KEY == data['signature']:
@@ -23,13 +26,15 @@ def validate_user(data):
 	else:
 		return "Invalid input data"
 
-
 @app.route('/')
 def index():
-	return render_template('index.html')
+	return render_template('index.html', display=LASTDATA)
 
 @app.route('/events', methods=['POST'])
 def events():
-	event_data = json.loads(request.json)
+	event_data = request.json
+	if not isinstance(event_data, dict):
+		event_data = json.loads(request.json)
 	checked_data = validate_user(event_data)
+	globals()['LASTDATA'] = str(checked_data)
 	return str(checked_data)
