@@ -5,6 +5,7 @@ Licence: GPLv3
 """
 
 from app import db
+import datetime
 
 #class Day(db.Model):
 #    id = db.Column(db.Integer, primary_key=True)
@@ -15,6 +16,7 @@ from app import db
 class Record(db.Model):
     id = db.Column(db.Integer, primary_key=True)
 #    day_id = db.Column(db.Integer, db.ForeignKey('day.id'))
+    datetime = db.Column(db.DateTime)
     temp1 = db.Column(db.Float)
     temp2 = db.Column(db.Float)
     humidity = db.Column(db.Float)
@@ -32,6 +34,7 @@ class Record(db.Model):
                     self.light_2 = value[1]
                 else:
                     setattr(self, key, value)
+        self.datetime = datetime.datetime.now()
 
     def __repr__(self):
         return '{}{}'.format(self.temp1, self.temp2)
