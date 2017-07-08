@@ -27,8 +27,8 @@ lm.login_view = 'login'
 
 
 
-from app import views, models, confguration
+from app import views, models, configuration
 
-if not os.path.isfile(confguration.SQLALCHEMY_DATABASE_URI):
+if not os.path.isfile(configuration.Config.SQLALCHEMY_DATABASE_URI):
     db.create_all()
     db.session.commit()
