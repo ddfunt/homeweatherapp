@@ -37,16 +37,43 @@
     	HUMIDITY = document.getElementById('humidity');
 	Plotly.plot( HUMIDITY, [{
     x: {{dates|safe}},
-	y: {{humidity_data}} }], layout );
+	y: {{humidity_data}} }], {
+          xaxis: {
+            type: 'date',
+            title: 'date'
+          },
+          yaxis: {
+            title: 'percent'
+          },
+          title:'Humidity'
+        });
 
     	LIGHT1 = document.getElementById('light1');
 	Plotly.plot( LIGHT1, [{
     x: {{dates|safe}},
-	y: {{light1_data}} }], layout );
+	y: {{light1_data}} }],{
+          xaxis: {
+            type: 'date',
+            title: 'date'
+          },
+          yaxis: {
+            title: 'counts'
+          },
+          title:'Light Sensor 1'
+        } );
 
         	LIGHT2 = document.getElementById('light2');
 	Plotly.plot( LIGHT2, [{
     x: {{dates|safe}},
-	y: {{light2_data}} }], layout );
+	y: {{light2_data}} }], {
+          xaxis: {
+            type: 'date',
+            title: 'date'
+          },
+          yaxis: {
+            title: 'counts'
+          },
+          title:'Light Sensor 2'
+        });
 </script>
 {%endblock%}
