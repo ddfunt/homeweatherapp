@@ -11,6 +11,7 @@
 <div id="temp1" style="width:600px;height:250px;"></div>
 <div id="temp2" style="width:600px;height:250px;"></div>
 <div id="humidity" style="width:600px;height:250px;"></div>
+<div id="pressure" style="width:600px;height:250px;"></div>
 <div id="light1" style="width:600px;height:250px;"></div>
 <div id="light2" style="width:600px;height:250px;"></div>
 
@@ -48,6 +49,19 @@
           title:'Humidity'
         });
 
+       	PRESSURE = document.getElementById('pressure');
+	Plotly.plot( PRESSURE, [{
+    x: {{dates|safe}},
+	y: {{pressure_data}} }],{
+          xaxis: {
+            type: 'date',
+            title: 'date'
+          },
+          yaxis: {
+            title: '???'
+          },
+          title:'Pressure'
+        } );
     	LIGHT1 = document.getElementById('light1');
 	Plotly.plot( LIGHT1, [{
     x: {{dates|safe}},

@@ -34,6 +34,7 @@ def index():
 	dates = [entry.datetime.strftime("%Y-%m-%d %H:%M:%S") for entry in data]
 	temp2 = [entry.temp2 for entry in data]
 	humidity = [entry.humidity for entry in data]
+	pressure = [entry.pressure for entry in data]
 	light1 = [entry.light_1 for entry in data]
 	light2 = [entry.light_2 for entry in data]
 
@@ -41,7 +42,8 @@ def index():
 						   temp2_data = temp2,
 						   humidity_data = humidity,
 						   light1_data=light1,
-						   light2_data=light2)
+						   light2_data=light2,
+						   pressure_data=pressure)
 
 @app.route('/events', methods=['POST'])
 def events():
