@@ -6,4 +6,24 @@
 {{display}}
 
 
+
+
+<div id="tester" style="width:600px;height:250px;"></div>
+
+<script>
+    var layout = {
+  xaxis: {
+    type: 'date',
+    title: 'date'
+  },
+  yaxis: {
+    title: 'deg C'
+  },
+  title:'A cool plot'
+};
+	TESTER = document.getElementById('tester');
+	Plotly.plot( TESTER, [{
+    x: {{dates|safe}},
+	y: {{temp1_data}} }], layout );
+</script>
 {%endblock%}
