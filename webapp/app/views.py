@@ -32,8 +32,16 @@ def index():
 	data = Record.query.all()
 	temp1 = [entry.temp1 for entry in data]
 	dates = [entry.datetime.strftime("%Y-%m-%d %H:%M:%S") for entry in data]
+	temp2 = [entry.temp2 for entry in data]
+	humidity = [entry.humidity for entry in data]
+	light1 = [entry.light_1 for entry in data]
+	light2 = [entry.light_2 for entry in data]
 
-	return render_template('index.html', display=LASTDATA, temp1_data=temp1, dates=dates)
+	return render_template('index.html', display=LASTDATA, temp1_data=temp1, dates=dates,
+						   temp2_data = temp2,
+						   humidity_data = humidity,
+						   light1_data=light1,
+						   light2_data=light2)
 
 @app.route('/events', methods=['POST'])
 def events():

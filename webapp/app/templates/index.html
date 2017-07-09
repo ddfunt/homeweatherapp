@@ -8,7 +8,11 @@
 
 
 
-<div id="tester" style="width:600px;height:250px;"></div>
+<div id="temp1" style="width:600px;height:250px;"></div>
+<div id="temp2" style="width:600px;height:250px;"></div>
+<div id="humidity" style="width:600px;height:250px;"></div>
+<div id="light1" style="width:600px;height:250px;"></div>
+<div id="light2" style="width:600px;height:250px;"></div>
 
 <script>
     var layout = {
@@ -21,9 +25,28 @@
   },
   title:'A cool plot'
 };
-	TESTER = document.getElementById('tester');
-	Plotly.plot( TESTER, [{
+	TEMP1 = document.getElementById('temp1');
+	Plotly.plot( TEMP1, [{
     x: {{dates|safe}},
 	y: {{temp1_data}} }], layout );
+
+    	TEMP2 = document.getElementById('temp2');
+	Plotly.plot( TEMP2, [{
+    x: {{dates|safe}},
+	y: {{temp2_data}} }], layout );
+    	HUMIDITY = document.getElementById('humidity');
+	Plotly.plot( HUMIDITY, [{
+    x: {{dates|safe}},
+	y: {{humidity_data}} }], layout );
+
+    	LIGHT1 = document.getElementById('light1');
+	Plotly.plot( LIGHT1, [{
+    x: {{dates|safe}},
+	y: {{light1_data}} }], layout );
+
+        	LIGHT2 = document.getElementById('light2');
+	Plotly.plot( LIGHT2, [{
+    x: {{dates|safe}},
+	y: {{light2_data}} }], layout );
 </script>
 {%endblock%}
