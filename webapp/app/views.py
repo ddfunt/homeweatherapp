@@ -30,11 +30,9 @@ def validate_user(data):
 def index():
 
 	data = Record.query.all()
-	print('data', data)
 	temp1 = [entry.temp1 for entry in data]
 	dates = [entry.datetime.strftime("%Y-%m-%d %H:%M:%S") for entry in data]
-	print(dates)
-	print(temp1)
+
 	return render_template('index.html', display=LASTDATA, temp1_data=temp1, dates=dates)
 
 @app.route('/events', methods=['POST'])
