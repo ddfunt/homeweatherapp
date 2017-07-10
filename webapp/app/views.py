@@ -42,6 +42,9 @@ def utc_to_local(utc_dt, tz=None):
 		tz = datetime.timezone(datetime.timedelta(hours=-4), name='MYTZ')
 	return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=tz)
 
+def celcius_to_faren(deg_c):
+	return (deg_c * 9 / 5) + 32
+
 def json_to_db(data):
 
 	record = Record(**data)
@@ -56,9 +59,9 @@ def index():
 	data = Record.query.all()
 	temp1, dates, temp2, humidity, pressure, light1, light2 = [], [], [], [], [], [], []
 	for entry in data:
-		temp1.append(entry.temp1)
+		temp1.append(celcius_to_faren(entry.temp1))
 		dates.append(utc_to_local(entry.datetime).strftime("%Y-%m-%d %H:%M:%S"))
-		temp2.append(entry.temp2)
+		temp2.append(celcius_to_faren(entry.temp2))
 		humidity.append(entry.humidity)
 		pressure.append(pa_to_mmhg(entry.pressure))
 		light1.append(entry.light_1)
