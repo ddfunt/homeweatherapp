@@ -11,11 +11,16 @@ from .forms import ExampleForm, LoginForm
 from .models import Record#, Day
 
 import json
+import datetime
+from datetime import timezone
+import logging
 
+# CONSTANTS...move to config file
 VALIDATION_KEY = 'abcd'
-
 LASTDATA = 'NOTHING YET'
 
+
+logger = logging.getLogger(__file__)
 
 def validate_user(data):
 	if 'signature' in data.keys():
@@ -26,17 +31,38 @@ def validate_user(data):
 	else:
 		return "Invalid input data", False
 
+def pa_to_mmhg(pressure):
+	pa_per_atm = 9.80665E4
+	mmhg_per_atm = 760
+
+	return (pressure / pa_per_atm) * mmhg_per_atm
+
+def utc_to_local(utc_dt, tz=None):
+	if not tz:
+		tz = datetime.timezone(datetime.timedelta(hours=-4), name='MYTZ')
+	return utc_dt.replace(tzinfo=timezone.utc).astimezone(tz=tz)
+
+def json_to_db(data):
+
+	record = Record(**data)
+	logger.info('STORING NEW DATA')
+	db.session.add(record)
+
+	db.session.commit()
+
 @app.route('/')
 def index():
 
 	data = Record.query.all()
-	temp1 = [entry.temp1 for entry in data]
-	dates = [entry.datetime.strftime("%Y-%m-%d %H:%M:%S") for entry in data]
-	temp2 = [entry.temp2 for entry in data]
-	humidity = [entry.humidity for entry in data]
-	pressure = [entry.pressure for entry in data]
-	light1 = [entry.light_1 for entry in data]
-	light2 = [entry.light_2 for entry in data]
+	temp1, dates, temp2, humidity, pressure, light1, light2 = [], [], [], [], [], [], []
+	for entry in data:
+		temp1.append(entry.temp1)
+		dates.append(utc_to_local(entry.datetime).strftime("%Y-%m-%d %H:%M:%S"))
+		temp2.append(entry.temp2)
+		humidity.append(entry.humidity)
+		pressure.append(pa_to_mmhg(entry.pressure))
+		light1.append(entry.light_1)
+		light2.append(entry.light_2)
 
 	return render_template('index.html', display=LASTDATA, temp1_data=temp1, dates=dates,
 						   temp2_data = temp2,
@@ -57,9 +83,3 @@ def events():
 	return str(checked_data)
 
 
-def json_to_db(data):
-	record = Record(**data)
-	print(record)
-	db.session.add(record)
-
-	db.session.commit()
